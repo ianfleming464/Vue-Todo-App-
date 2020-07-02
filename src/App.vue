@@ -9,7 +9,7 @@
           <img src="./assets/logo.png" alt="logo" />
         </md-avatar>
         <div class="md-toolbar-section-end">
-          <a class="text-link" href="https://github.com/ianfleming464">by Ian Fleming</a>
+          <a class="text-link" href="https://github.com/ianfleming464/Vue-Todo-App-" target="_blank">by Ian Fleming</a>
         </div>
       </div>
     </md-toolbar>
@@ -55,12 +55,6 @@
                 <md-button class="md-mini md-plain" v-if="todo.editing === false" @click="removeTodo(todo)">
                   <md-icon>delete</md-icon>
                 </md-button>
-                <md-button class="md-mini md-plain" v-if="todo.editing === true" @click="stopEdit(todo)">
-                  Save
-                </md-button>
-                <md-button class="md-mini md-plain" v-if="todo.editing === true" @click="editTodo(todo)">
-                  Cancel
-                </md-button>
               </span>
             </li>
           </ul>
@@ -79,6 +73,7 @@ export default {
       editedTodo: "",
     };
   },
+
   methods: {
     addTodo() {
       this.todos.push({
@@ -97,11 +92,23 @@ export default {
       this.todo.completed = !this.todo.completed;
     },
     editTodo(todo) {
-      const index = this.todos.indexOf(todo);
-      this.todos[index].editing = !this.todos[index].editing;
+      todo.editing = true;
     },
     stopEdit(todo) {
       todo.editing = false;
+    },
+  },
+  mounted() {
+    console.log("App mounted!");
+    if (localStorage.getItem("todos")) this.todos = JSON.parse(localStorage.getItem("todos"));
+  },
+  watch: {
+    todos: {
+      handler() {
+        console.log("Todos changed!");
+        localStorage.setItem("todos", JSON.stringify(this.todos));
+      },
+      deep: true,
     },
   },
 };
@@ -157,6 +164,7 @@ input.completed {
 }
 
 .text-link {
-  color: white !important;
+  color: lightblue !important;
+  text-decoration: underline !important;
 }
 </style>
